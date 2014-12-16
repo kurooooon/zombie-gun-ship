@@ -15,9 +15,9 @@ public class ZombieFactory : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		float rand = Random.value;
-		if (rand > 0.99f)
+		if (rand > 0.997f)
 		{
-			Debug.Log("generate zombie");
+//			Debug.Log("generate zombie");
 			float num = Random.Range(1, 5);
 			for (int i = 0; i < num; i++)
 			{

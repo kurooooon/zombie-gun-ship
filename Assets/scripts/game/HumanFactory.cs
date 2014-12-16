@@ -15,9 +15,9 @@ public class HumanFactory : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		float rand = Random.value;
-		if (rand > 0.99f)
+		if (rand > 0.997f)
 		{
-			Debug.Log("generate human");
+//			Debug.Log("generate human");
 			float num = Random.Range(1, 3);
 			for (int i = 0; i < num; i++)
 			{

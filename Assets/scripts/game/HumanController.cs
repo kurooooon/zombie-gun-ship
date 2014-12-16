@@ -8,10 +8,13 @@ public class HumanController : MonoBehaviour {
 	private NavMeshAgent _agent;
 	private ArrayList _animList; 
 	private bool _isAlive;
+	private bool _scouted;
 	
 	// Use this for initialization
 	void Start () {
 		_isAlive = true;
+		_scouted = false;
+
 		_body = gameObject.transform.FindChild("MAX").gameObject; 
 		_animList = new ArrayList(); 
 		foreach (AnimationState anim in _body.animation) {
@@ -30,7 +33,7 @@ public class HumanController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (_isAlive)
+		if (_isAlive && !_scouted)
 			_agent.SetDestination(_goal.transform.position);
 	}
 	
@@ -44,6 +47,13 @@ public class HumanController : MonoBehaviour {
 			
 			StartCoroutine("death");
 		}
+	}
+
+	public void receiveScout()
+	{
+		_scouted = true;
+		_agent.Stop();
+		_body.animation.wrapMode = WrapMode.Default;
 	}
 	
 	private IEnumerator death() {
