@@ -65,4 +65,18 @@ public class GameController : MonoBehaviour {
 		_camera.fieldOfView = zoom;
 		_isZoom = !_isZoom;
 	}
+
+	public void deathHuman()
+	{
+		GameData.life -= 1;
+		if (GameData.life <= 0)
+		{
+			gameOver();
+		}
+	}
+
+	private void gameOver()
+	{
+		Debug.Log("gameOver!");
+	}
 }

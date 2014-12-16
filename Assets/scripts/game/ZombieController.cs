@@ -11,6 +11,7 @@ public class ZombieController : MonoBehaviour {
 	private bool _scouting;
 	private bool _attacking;
 	private GameObject _targetHuman;
+	private float _timer;
 
 	// Use this for initialization
 	void Start () {
@@ -25,19 +26,19 @@ public class ZombieController : MonoBehaviour {
 			_animList.Add(anim);
 		}
 
-//		_animList = _body.GetComponent("Animations") as Animation[];
-//		_animList = _body. 
 		_goal = GameObject.Find("Goal");
 		_agent = GetComponent<NavMeshAgent>();
-
-		_body.animation.wrapMode = WrapMode.Loop;
-		_body.animation.Play("run");
+		startRun();
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		if (_attacking) return;
+		if (_attacking)
+		{
+			attackTimer();
+			return;
+		}
 
 		if (_scouting && _targetHuman)
 		{
@@ -77,9 +78,11 @@ public class ZombieController : MonoBehaviour {
 			_attacking = true;
 			Debug.Log("attack zombie -> human");
 			HumanController humanController = col.gameObject.GetComponent<HumanController>(); 
-			humanController.receiveScout();
+			humanController.receiveScout(gameObject);
 			_agent.Stop();
+			_body.animation.Play("idle");
 			_body.animation.wrapMode = WrapMode.Default;
+			startAttack();
 		}
 	}
 
@@ -89,6 +92,7 @@ public class ZombieController : MonoBehaviour {
 		{
 			_scouting = true;
 			_targetHuman = target;
+			transform.LookAt(_targetHuman.transform);
 		}
 	}
 
@@ -99,5 +103,44 @@ public class ZombieController : MonoBehaviour {
 		yield return new WaitForSeconds (1.8f);
 		
 		Destroy(gameObject);
+	}
+
+	private void startRun()
+	{
+		_body.animation.wrapMode = WrapMode.Loop;
+		_body.animation.Play("run");
+	}
+	
+	private void startAttack()
+	{
+		_timer = 0f;
+	}
+
+	private void attackTimer()
+	{
+		if (!_targetHuman)
+		{
+			_attacking = false;
+			startRun();
+			return;
+		}
+
+		_timer += Time.deltaTime;
+
+		if (_timer >= 2.5f)
+		{
+			_timer = 0.0f;
+			if (_targetHuman)
+			{
+				StartCoroutine("attack");
+			}
+		}
+	}
+
+	private IEnumerator attack()
+	{
+		_body.animation.Play("attack01");
+		yield return new WaitForSeconds(0.5f);
+		_targetHuman.GetComponent<HumanController>().attacked();
 	}
 }
