@@ -18,13 +18,18 @@ public class ZombieScoutingController : MonoBehaviour {
 	void Update () {
 	}
 
+	public void setController()
+	{
+//		_controller = gameObject.transform.parent.GetComponent<ZombieController>();
+	}
+
 	void OnTriggerEnter (Collider col) {
-		if ( col.gameObject.tag.IndexOf(GameConfig.TAG_HUMAN) >= 0 && !_scouting)
+		if ( col.gameObject.tag.IndexOf(GameConfig.TAG_HUMAN_DETECTION) >= 0 && !_scouting)
 		{
-			Debug.Log("scout target!");
+//			Debug.Log("scout target!");
 //			_scouting = true;
 //			_targetHuman = col.gameObject;
-			_controller.findTarget(col.gameObject);
+			_controller.findTarget(col.gameObject.transform.parent.gameObject);
 		}
 	}
 }

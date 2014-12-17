@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour {
 		if ( Input.GetMouseButtonDown(0) )
 		{
 			_startPos = Input.mousePosition;
-			Debug.Log("drag start");
+//			Debug.Log("drag start");
 		}
 		else if ( Input.GetMouseButton(0) )
 		{
@@ -40,7 +40,7 @@ public class GameController : MonoBehaviour {
 	//			Debug.Log("drag..." + Input.mousePosition.x + ", "+ Input.mousePosition.y + ", " + Input.mousePosition.z);
 				float distX = Input.mousePosition.x - _startPos.x;
 				float distY = Input.mousePosition.y - _startPos.y;
-				Debug.Log("dist: " + distX + ", " + distY);
+//				Debug.Log("dist: " + distX + ", " + distY);
 				_camera.transform.Rotate( new Vector3(distY / 500, -distX / 500, 0) );
 			}
 		}
@@ -51,7 +51,7 @@ public class GameController : MonoBehaviour {
 			else
 				_bulletController.shoot(_startPos);
 
-			Debug.Log("drag end");
+//			Debug.Log("drag end");
 		}
 
 	}
@@ -66,13 +66,21 @@ public class GameController : MonoBehaviour {
 		_isZoom = !_isZoom;
 	}
 
-	public void deathHuman()
+	public void getMoney(int count)
 	{
-		GameData.life -= 1;
+//		Debug.Log("get money current:" + GameData.getMoney + ", " + count);
+		GameData.getMoney = GameData.getMoney + count;
+		Debug.Log("get money total:" + GameData.getMoney);
+	}
+
+	public void lostLife()
+	{
+		GameData.life = GameData.life - 1;
 		if (GameData.life <= 0)
 		{
 			gameOver();
 		}
+		Debug.Log("lost life total:" + GameData.life);
 	}
 
 	private void gameOver()

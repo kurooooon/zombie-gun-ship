@@ -13,7 +13,10 @@ public class GameConfig : MonoBehaviour {
 	public static string BULLET_CODE = "bullet";
 	public static string TAG_SCOUTING = "zombieScouting";
 	public static string TAG_HUMAN = "human";
+	public static string TAG_HUMAN_DETECTION = "detectionHuman";
+	public static string TAG_GOAL = "goal";
 
 	public static int GAME_LIFE = 3;
 	public static int HUMAN_LIFE = 5;
+	public static int DEATH_COIN = 5;
 }

@@ -30,7 +30,7 @@ public class CameraController : MonoBehaviour {
 //		transform.position = new Vector3(Mathf.Cos(_angle) * 10, _initPos.y, Mathf.Sin(_angle) * 10);
 //		_angle += 0.005f;
 
-		transform.Rotate(0, 0.2f, 0);
+		transform.Rotate(0, 0.05f, 0);
 	}
 }
  

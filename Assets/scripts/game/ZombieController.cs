@@ -1,37 +1,30 @@
-﻿ using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
-public class ZombieController : MonoBehaviour {
-
-	private GameObject _body;
-	private GameObject _goal;
-	private NavMeshAgent _agent;
+public class ZombieController : BaseHumanController
+{
+//	public ZombieScoutingController scoutingPF;
+//	private ZombieScoutingController _scoutingController;
 	private ArrayList _animList; 
 	private bool _isAlive;
 	private bool _scouting;
 	private bool _attacking;
 	private GameObject _targetHuman;
 	private float _timer;
-
-	// Use this for initialization
-	void Start () {
+	
+	void Start ()
+	{
 		_isAlive = true;
 		_scouting = false;
 		_attacking = false;
 
 		_body = gameObject.transform.FindChild("ZombieBody").gameObject; 
-		_animList = new ArrayList(); 
-		foreach (AnimationState anim in _body.animation) {
-//			Debug.Log(anim.name);
-			_animList.Add(anim);
-		}
+		base.Start();
 
-		_goal = GameObject.Find("Goal");
-		_agent = GetComponent<NavMeshAgent>();
 		startRun();
+//		setScouting();
 	}
-	
-	// Update is called once per frame
+
 	void Update ()
 	{
 		if (_attacking)
@@ -40,75 +33,128 @@ public class ZombieController : MonoBehaviour {
 			return;
 		}
 
-		if (_scouting && _targetHuman)
-		{
-			_agent.SetDestination(_targetHuman.transform.position);
-		}
-		else if (_isAlive)
-		{
-			_agent.SetDestination(_goal.transform.position);
-		}
+//		if (!_agent.hasPath)
+//		{
+			//reach goal
+			if (isGoal)
+			{
+				enterGoal();
+				return;
+			}
+
+			if (_scouting && _targetHuman)
+			{
+				_agent.SetDestination(_targetHuman.transform.position);
+			}
+			else if (_isAlive)
+			{
+				setScouting();
+				_agent.SetDestination(_goal.transform.position);
+			}
+//		}
 	}
 
-	void OnCollisionEnter (Collision col)
+	void OnCollisionEnter(Collision col)
 	{
+		Debug.Log("collision " + col.gameObject.tag);
+
 		//bullet
-		if ( col.gameObject.tag.IndexOf(GameConfig.BULLET_CODE) >= 0 && _isAlive )
+		if ( col.gameObject.tag.IndexOf(GameConfig.BULLET_CODE) == 0 && _isAlive )
 		{
 			_isAlive = false;
 			_agent.Stop();
+			_agent.ResetPath();
 			Debug.Log("fuck!!");
 			_body.animation.wrapMode = WrapMode.Default;
 
 			StartCoroutine("death");
 		}
-//		else if ( col.gameObject.tag.IndexOf(GameConfig.TAG_HUMAN) >= 0 && !_scouting)
-//		{
-//			Debug.Log("scout target");
-//			_scouting = true;
-//			_targetHuman = col.gameObject;
-//		}
-	}
 
-	void OnTriggerEnter(Collider col)
-	{
-		//human
-		if ( col.gameObject.tag.IndexOf(GameConfig.TAG_HUMAN) >= 0)
+		else if ( col.gameObject.tag.IndexOf(GameConfig.TAG_HUMAN) == 0 && !_attacking)
 		{
 			_attacking = true;
 			Debug.Log("attack zombie -> human");
 			HumanController humanController = col.gameObject.GetComponent<HumanController>(); 
 			humanController.receiveScout(gameObject);
 			_agent.Stop();
+			_agent.ResetPath();
 			_body.animation.Play("idle");
 			_body.animation.wrapMode = WrapMode.Default;
 			startAttack();
 		}
+
+//		else if ( col.gameObject.tag.IndexOf(GameConfig.TAG_HUMAN) >= 0 && !_scouting)
+//		{
+//			Debug.Log("scout target");
+////			_scouting = true;
+//			_targetHuman = col.gameObject;
+//		}
+	}
+
+	private void setScouting()
+	{
+//		_scoutingController = Instantiate(scoutingPF, transform.position, transform.rotation) as ZombieScoutingController;
+//		_scoutingController.transform.parent = transform;
+//		_scoutingController.setController();
+	}
+
+	private void removeScouting()
+	{
+//		Destroy(_scoutingController.gameObject);
+//		_scoutingController = null;
+	}
+
+	void OnTriggerEnter(Collider col)
+	{
+		if ( col.gameObject.tag.IndexOf(GameConfig.TAG_HUMAN) >= 0)
+		{
+			findTarget(col.gameObject);
+		}
+		//human
+//		if ( col.gameObject.tag.IndexOf(GameConfig.TAG_HUMAN_DETECTION) >= 0 && !_scouting)
+//		{
+//			Debug.Log("scout target");
+//			//			_scouting = true;
+//			_targetHuman = col.gameObject.transform.parent.gameObject;
+//		}
+//		if ( col.gameObject.tag.IndexOf(GameConfig.TAG_HUMAN) == 0)
+//		{
+//			_attacking = true;
+//			Debug.Log("attack zombie -> human");
+//			HumanController humanController = col.gameObject.GetComponent<HumanController>(); 
+//			humanController.receiveScout(gameObject);
+//			_agent.Stop();
+//			_agent.ResetPath();
+//			_body.animation.Play("idle");
+//			_body.animation.wrapMode = WrapMode.Default;
+//			startAttack();
+//		}
 	}
 
 	public void findTarget(GameObject target)
 	{
 		if (!_scouting)
 		{
+			removeScouting();
 			_scouting = true;
 			_targetHuman = target;
+			_agent.ResetPath();
+//			_targetHuman.GetComponent<HumanController>().setFindTarget();
 			transform.LookAt(_targetHuman.transform);
 		}
 	}
+	
+//	override protected void startRun()
+//	{
+//		_body.animation.wrapMode = WrapMode.Loop;
+//		_body.animation.Play("run");
+//	}
 
-	private IEnumerator death() {
-
-		_body.animation.Play("death");
-
-		yield return new WaitForSeconds (1.8f);
-		
-		Destroy(gameObject);
-	}
-
-	private void startRun()
+	override protected void enterGoal()
 	{
-		_body.animation.wrapMode = WrapMode.Loop;
-		_body.animation.Play("run");
+		Debug.Log("reach goal zombie");
+		_controller.lostLife();
+		Destroy(gameObject);
 	}
 	
 	private void startAttack()
@@ -135,6 +181,16 @@ public class ZombieController : MonoBehaviour {
 				StartCoroutine("attack");
 			}
 		}
+	}
+
+	private IEnumerator death() {
+		
+		_body.animation.Play("death");
+		_controller.getMoney(GameConfig.DEATH_COIN);
+		
+		yield return new WaitForSeconds (1.8f);
+		
+		Destroy(gameObject);
 	}
 
 	private IEnumerator attack()

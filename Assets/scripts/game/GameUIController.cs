@@ -15,6 +15,7 @@ public class GameUIController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		_life.text = "LIFE: " + GameData.life;
+		_money.text = "MONEY: " + GameData.getMoney;
 	}
 }

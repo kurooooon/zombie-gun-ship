@@ -1,62 +1,75 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HumanController : MonoBehaviour {
-
-	private GameController _controller;
-	private GameObject _body;
-	private GameObject _goal;
-	private NavMeshAgent _agent;
-	private ArrayList _animList; 
+public class HumanController : BaseHumanController
+{	
+//	public GameObject humanDetactionPF;
+//	private GameObject _humanDetactionGO;
 	private bool _isAlive;
-	private bool _scouted;
+//	private bool _scouted;
 	private int _life;
-	
-	// Use this for initialization
-	void Start () {
+	private GameObject _scoutedZombie;
+
+	void Start ()
+	{
 		_isAlive = true;
-		_scouted = false;
+//		_scouted = false;
 		_life = GameConfig.HUMAN_LIFE;
 
-		_controller = GameObject.Find(GameConfig.GAME_CONTROLLER).GetComponent<GameController>();
-		_body = gameObject.transform.FindChild("MAX").gameObject; 
-		_animList = new ArrayList(); 
-		foreach (AnimationState anim in _body.animation) {
-			//			Debug.Log(anim.name);
-			_animList.Add(anim);
+		_body = gameObject.transform.FindChild("MAX").gameObject;
+		base.Start();
+
+//		startRun();
+	}
+
+	void Update ()
+	{
+		if (_isAlive && !_scoutedZombie)
+		{
+			if (!_agent.hasPath)
+			{
+				if (isGoal)
+				{
+					enterGoal();
+					return;
+				}
+
+//				setDetection();
+				_agent.SetDestination(_goal.transform.position);
+				startRun();
+			}
 		}
-		
-		//		_animList = _body.GetComponent("Animations") as Animation[];
-		//		_animList = _body. 
-		_goal = GameObject.Find("Goal");
-		_agent = GetComponent<NavMeshAgent>();
-		
-		_body.animation.wrapMode = WrapMode.Loop;
-		_body.animation.Play("run");
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		if (_isAlive && !_scouted)
-			_agent.SetDestination(_goal.transform.position);
-	}
-	
-	void OnCollisionEnter (Collision col) {
+	void OnCollisionEnter (Collision col)
+	{
 		if ( col.gameObject.tag.IndexOf(GameConfig.BULLET_CODE) >= 0 && _isAlive )
 		{
-			_isAlive = false;
-			_agent.Stop();
-			Debug.Log("fuck!!");
-			_body.animation.wrapMode = WrapMode.Default;
-			
-			StartCoroutine("death");
+			receiveBullet();
 		}
+	}
+
+	void OnTriggerEnter(Collider col)
+	{
+	}
+
+	private void receiveBullet()
+	{
+		_isAlive = false;
+		_agent.Stop();
+		_agent.ResetPath();
+//		Debug.Log("fuck!!");
+		_body.animation.wrapMode = WrapMode.Default;
+		
+		StartCoroutine("death");
 	}
 
 	public void receiveScout(GameObject zombie)
 	{
-		_scouted = true;
+		_scoutedZombie = zombie;
+//		_scouted = true;
 		_agent.Stop();
+		_agent.ResetPath();
 		transform.LookAt(zombie.transform);
 		_body.animation.Play("idle");
 		_body.animation.wrapMode = WrapMode.Default;
@@ -71,6 +84,23 @@ public class HumanController : MonoBehaviour {
 			StartCoroutine("death");
 		}
 	}
+
+//	private void setDetection()
+//	{
+//		_humanDetactionGO = Instantiate(humanDetactionPF, transform.position, transform.rotation) as GameObject;
+//		_humanDetactionGO.transform.parent = transform;
+//	}
+//
+//	private void removeDetection()
+//	{
+//		Destroy(_humanDetactionGO);
+//	}
+//
+//	public void setFindTarget()
+//	{
+//		Destroy(rigidbody);
+////		removeDetection();
+//	}
 	
 	private IEnumerator death() {
 		
@@ -79,6 +109,12 @@ public class HumanController : MonoBehaviour {
 		yield return new WaitForSeconds (1.8f);
 		
 		Destroy(gameObject);
-		_controller.deathHuman();
+		_controller.lostLife();
+	}
+
+	override protected void enterGoal()
+	{
+		_controller.getMoney(5);
+		Destroy(gameObject);
 	}
 }
