@@ -1,0 +1,32 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/game/BulletController.cs">
+    <Files>
+      <File FileName="Assets/scripts/game/GameUIController.cs" Line="40" Column="27" />
+      <File FileName="Assets/scripts/data/bullet/BombData.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/data/bullet/RifleData.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/game/CameraController.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/game/GameController.cs" Line="94" Column="64" />
+      <File FileName="Assets/scripts/game/BulletController.cs" Line="12" Column="1" />
+      <File FileName="Assets/scripts/data/GameConfig.cs" Line="23" Column="35" />
+      <File FileName="Assets/scripts/data/GameData.cs" Line="11" Column="37" />
+      <File FileName="Assets/scripts/game/ZombieController.cs" Line="190" Column="26" />
+      <File FileName="Assets/scripts/game/ZombieScoutingController.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/data/bullet/BaseBulletData.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/game/HumanFactory.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/game/BaseHumanController.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/game/HumanController.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/game/ZombieFactory.cs" Line="5" Column="2" />
+      <File FileName="Assets/scripts/title/StartButtonController.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/data/SceneData.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/score/ScoreUIController.cs" Line="22" Column="3" />
+      <File FileName="../FlappyBird/Assets/scripts/game/GameController.cs" Line="58" Column="43" />
+      <File FileName="Assets/scripts/score/ScoreController.cs" Line="12" Column="2" />
+      <File FileName="Assets/scripts/game/Bullet.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
