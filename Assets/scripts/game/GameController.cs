@@ -9,38 +9,39 @@ public class GameController : MonoBehaviour {
 	private Vector3 _startPos;
 	private bool _isZoom;
 	private bool _isDraging;
-
-	// Use this for initialization
-	void Start () {
+	private float _defaultScale;
+	
+	void Start ()
+	{
+		GameData.killZombie = 0;
+		GameData.life = 3;
+		GameData.getMoney = 0;
 		_camera = Camera.main;
+		_defaultScale = _camera.fieldOfView;
 		_bulletController = GameObject.Find(GameConfig.BULLET_CONTROLLER).GetComponent<BulletController>();
 		_isZoom = false;
 		_isDraging = false;
 	}
-	
-	// Update is called once per frame
-	void Update () {
 
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			toZoom();
-		}
+	void Update ()
+	{
+
+//		if (Input.GetKeyDown(KeyCode.Space))
+//		{
+//			toZoom();
+//		}
 
 		if ( Input.GetMouseButtonDown(0) )
 		{
 			_startPos = Input.mousePosition;
-//			Debug.Log("drag start");
 		}
 		else if ( Input.GetMouseButton(0) )
 		{
 			if (_startPos != Input.mousePosition)
 			{
 				_isDraging = true;
-	//			Debug.Log("start pos" + _startPos.x + ", "+ _startPos.y + ", " + _startPos.z);
-	//			Debug.Log("drag..." + Input.mousePosition.x + ", "+ Input.mousePosition.y + ", " + Input.mousePosition.z);
 				float distX = Input.mousePosition.x - _startPos.x;
 				float distY = Input.mousePosition.y - _startPos.y;
-//				Debug.Log("dist: " + distX + ", " + distY);
 				_camera.transform.Rotate( new Vector3(distY / 500, -distX / 500, 0) );
 			}
 		}
@@ -50,27 +51,43 @@ public class GameController : MonoBehaviour {
 				_isDraging = false;
 			else
 				_bulletController.shoot(_startPos);
-
-//			Debug.Log("drag end");
 		}
 
 	}
 
-	/// <summary>
-	/// Tos the zoom.
-	/// </summary>
-	private void toZoom ()
+	public void setZoom(string code)
 	{
-		float zoom = (_isZoom) ? _camera.fieldOfView * 2 : _camera.fieldOfView / 2;
-		_camera.fieldOfView = zoom;
-		_isZoom = !_isZoom;
+		float scope = _bulletController.getScope;
+		if (code == GameConfig.ZOOM_IN && !_isZoom)
+		{
+			_isZoom = true;
+			_camera.fieldOfView = _camera.fieldOfView / scope;//_bulletController.getScope;
+		}
+		else
+		{
+			_isZoom = false;
+			_camera.fieldOfView = _defaultScale;
+		}
+//		toZoom();
 	}
+	
+//	private void toZoom ()
+//	{
+//		float zoom = (_isZoom) ? _camera.fieldOfView * 2 : _camera.fieldOfView / 2;
+//		_camera.fieldOfView = zoom;
+//		_isZoom = !_isZoom;
+//	}
 
 	public void getMoney(int count)
 	{
-//		Debug.Log("get money current:" + GameData.getMoney + ", " + count);
 		GameData.getMoney = GameData.getMoney + count;
 		Debug.Log("get money total:" + GameData.getMoney);
+	}
+
+	public void killZombie()
+	{
+		GameData.killZombie = GameData.killZombie + 1;
+		Debug.Log("kill total:" + GameData.killZombie);
 	}
 
 	public void lostLife()
@@ -83,8 +100,14 @@ public class GameController : MonoBehaviour {
 		Debug.Log("lost life total:" + GameData.life);
 	}
 
+	public void setBullet(string bulletCode)
+	{
+		setZoom(GameConfig.ZOOM_OUT);
+		_bulletController.setBullet(bulletCode);
+	}
+
 	private void gameOver()
 	{
-		Debug.Log("gameOver!");
+		SceneManager.instance.changeScene(SceneData.SCORE_SCENE, 0.5f);
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections;
 
 public class BaseBulletData : MonoBehaviour
 { 
+	protected GameObject _pf;
 	protected float _timer;
 	protected int _speed;
 	protected float _scopeScale;
@@ -12,7 +13,16 @@ public class BaseBulletData : MonoBehaviour
 
 	public BaseBulletData ()
 	{
+	}
+
+	virtual public void init()
+	{
 		_isReload = false;
+	}
+
+	public GameObject pf
+	{
+		get { return _pf; }
 	}
 
 	public int speed
@@ -25,14 +35,19 @@ public class BaseBulletData : MonoBehaviour
 		get { return _slot; }
 		set { _slot = value; }
 	}
+
+	public float scope
+	{
+		get { return _scopeScale; }
+	}
 	
-	public bool isReload
+	virtual public bool isReload
 	{
 		get { return _isReload; }
 		set { _isReload = value; }
 	}
 	
-	public void reload()
+	virtual public void reload()
 	{
 		_timer = 0;
 		_isReload = true;
@@ -53,6 +68,7 @@ public class BaseBulletData : MonoBehaviour
 			{
 				_isReload = false;
 				endReload();
+				Debug.Log("reload end");
 			}
 		}
 	}

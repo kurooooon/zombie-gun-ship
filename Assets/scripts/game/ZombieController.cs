@@ -56,7 +56,7 @@ public class ZombieController : BaseHumanController
 
 	void OnCollisionEnter(Collision col)
 	{
-		Debug.Log("collision " + col.gameObject.tag);
+//		Debug.Log("collision " + col.gameObject.tag);
 
 		//bullet
 		if ( col.gameObject.tag.IndexOf(GameConfig.BULLET_CODE) == 0 && _isAlive )
@@ -64,7 +64,7 @@ public class ZombieController : BaseHumanController
 			_isAlive = false;
 			_agent.Stop();
 			_agent.ResetPath();
-			Debug.Log("fuck!!");
+//			Debug.Log("fuck!!");
 			_body.animation.wrapMode = WrapMode.Default;
 
 			StartCoroutine("death");
@@ -187,6 +187,7 @@ public class ZombieController : BaseHumanController
 		
 		_body.animation.Play("death");
 		_controller.getMoney(GameConfig.DEATH_COIN);
+		_controller.killZombie();
 		
 		yield return new WaitForSeconds (1.8f);
 		
