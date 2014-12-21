@@ -26,11 +26,6 @@ public class GameController : MonoBehaviour {
 	void Update ()
 	{
 
-//		if (Input.GetKeyDown(KeyCode.Space))
-//		{
-//			toZoom();
-//		}
-
 		if ( Input.GetMouseButtonDown(0) )
 		{
 			_startPos = Input.mousePosition;
@@ -48,9 +43,25 @@ public class GameController : MonoBehaviour {
 		else if ( Input.GetMouseButtonUp(0) )
 		{
 			if (_isDraging)
+			{
 				_isDraging = false;
+			}
 			else
-				_bulletController.shoot(_startPos);
+			{
+//				Vector3 pos = Input.mousePosition;
+//				Ray ray = _camera.ScreenPointToRay(pos);
+//				RaycastHit hit = new RaycastHit();
+//				
+//				if (Physics.Raycast(ray, out hit))
+//				{
+//					GameObject obj = hit.collider.gameObject;
+//					Debug.Log(obj.name);
+//				}
+//				if ( Physics.Raycast(ray, out hit, 20) )
+//				{
+					_bulletController.shoot(_startPos);
+//				}
+			}
 		}
 
 	}
@@ -68,15 +79,7 @@ public class GameController : MonoBehaviour {
 			_isZoom = false;
 			_camera.fieldOfView = _defaultScale;
 		}
-//		toZoom();
 	}
-	
-//	private void toZoom ()
-//	{
-//		float zoom = (_isZoom) ? _camera.fieldOfView * 2 : _camera.fieldOfView / 2;
-//		_camera.fieldOfView = zoom;
-//		_isZoom = !_isZoom;
-//	}
 
 	public void getMoney(int count)
 	{

@@ -28,4 +28,6 @@ public class GameConfig : MonoBehaviour {
 	public static int GAME_LIFE = 3;
 	public static int HUMAN_LIFE = 5;
 	public static int DEATH_COIN = 5;
+
+	public static Font APP_FONT = (Font)Resources.Load("font/highway to heck", typeof(Font));
 }

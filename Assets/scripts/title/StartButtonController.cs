@@ -1,34 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StartButtonController : MonoBehaviour {
-
-	public AudioClip audioClip;
-//	public GUIStyle buttonStyle;
-	
+public class StartButtonController : MonoBehaviour
+{
 	private const int BUTTON_WIDTH = 100;
 	private const int BUTTON_HEIGHT = 40;
-
-	// Use this for initialization
-	void Start () {
 	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
 	void OnGUI ()
 	{
 		GUIStyle buttonStyle = new GUIStyle();
+		buttonStyle.font = GameConfig.APP_FONT;
 		buttonStyle.fontSize = 25;
-		buttonStyle.normal.textColor = Color.white;
+		buttonStyle.alignment = TextAnchor.UpperCenter;
+		buttonStyle.normal.textColor = Color.red;
 
-		// ボタンを表示する
-		if ( GUI.Button(new Rect( Screen.width / 2, Screen.height - BUTTON_HEIGHT - 120 , BUTTON_WIDTH, BUTTON_HEIGHT), "start", buttonStyle) )
+		if (GUI.Button(new Rect( (Screen.width - BUTTON_WIDTH) / 2, Screen.height - BUTTON_HEIGHT - 160 , BUTTON_WIDTH, BUTTON_HEIGHT), "Play Game", buttonStyle))
 		{
-//			audio.PlayOneShot(audioClip);
 			SceneManager.instance.setColor( new Color(255, 255, 255) );
 			SceneManager.instance.changeScene(SceneData.MENU_SCENE, 0.5f);
 		}

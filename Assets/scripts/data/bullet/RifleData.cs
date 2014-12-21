@@ -6,7 +6,7 @@ public class RifleData : BaseBulletData
 	public GameObject pf;
 	
 	private bool _init = false;
-	private const float RELOAD_TIME = 0.2f;
+	private const float RELOAD_TIME = 0.4f;
 	private const int MAX_SLOT = 1;
 	
 	public RifleData()

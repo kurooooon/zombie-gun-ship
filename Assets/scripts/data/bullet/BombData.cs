@@ -6,8 +6,8 @@ public class BombData : BaseBulletData
 	public GameObject pf;
 
 	private bool _init = false;
-	private const int MAX_SLOT = 4;
-	private const float RELOAD_TIME = 2f;
+	private const int MAX_SLOT = 2;
+	private const float RELOAD_TIME = 2.5f;
 
 	public BombData()
 	{

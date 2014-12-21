@@ -48,7 +48,7 @@ public class ZombieController : BaseHumanController
 			}
 			else if (_isAlive)
 			{
-				setScouting();
+//				setScouting();
 				_agent.SetDestination(_goal.transform.position);
 			}
 //		}
@@ -61,6 +61,8 @@ public class ZombieController : BaseHumanController
 		//bullet
 		if ( col.gameObject.tag.IndexOf(GameConfig.BULLET_CODE) == 0 && _isAlive )
 		{
+			_scouting = false;
+			_targetHuman = null;
 			_isAlive = false;
 			_agent.Stop();
 			_agent.ResetPath();
@@ -82,26 +84,6 @@ public class ZombieController : BaseHumanController
 			_body.animation.wrapMode = WrapMode.Default;
 			startAttack();
 		}
-
-//		else if ( col.gameObject.tag.IndexOf(GameConfig.TAG_HUMAN) >= 0 && !_scouting)
-//		{
-//			Debug.Log("scout target");
-////			_scouting = true;
-//			_targetHuman = col.gameObject;
-//		}
-	}
-
-	private void setScouting()
-	{
-//		_scoutingController = Instantiate(scoutingPF, transform.position, transform.rotation) as ZombieScoutingController;
-//		_scoutingController.transform.parent = transform;
-//		_scoutingController.setController();
-	}
-
-	private void removeScouting()
-	{
-//		Destroy(_scoutingController.gameObject);
-//		_scoutingController = null;
 	}
 
 	void OnTriggerEnter(Collider col)
@@ -133,9 +115,9 @@ public class ZombieController : BaseHumanController
 
 	public void findTarget(GameObject target)
 	{
-		if (!_scouting)
+		if (!_scouting && _isAlive)
 		{
-			removeScouting();
+//			removeScouting();
 			_scouting = true;
 			_targetHuman = target;
 			_agent.ResetPath();
